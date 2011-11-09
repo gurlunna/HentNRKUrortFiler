@@ -1,0 +1,13 @@
+*.jar
+*.class
+*.iws
+*.iml
+.classpath
+.project
+.settings/
+.target/
+target/
+.idea/workspace.xml
+.idea/
+*.bat
+*.txt
