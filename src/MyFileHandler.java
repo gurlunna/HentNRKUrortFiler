@@ -16,15 +16,14 @@ public class MyFileHandler {
         String json;
         String outfile = "urortJsonFile.txt";
         while ((json = in.readLine()) != null) {
-            BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outfile),"UTF8"));
-            out.write(json);
-            out.close();
             Data data = new Gson().fromJson(json, Data.class);
             List<Track> tracks = data.getResult().getTracks();
-
             for (Track t : tracks) {
                 saveTrack(t);
             }
+            BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outfile), "UTF8"));
+            out.write(json);
+            out.close();
         }
 
         in.close();
@@ -33,11 +32,15 @@ public class MyFileHandler {
     public static void saveTrack(Track track) throws MalformedURLException, IOException {
         String artist = track.getArtistName().replace(" ", "_");
         artist = artist.replace("&", "and");
+        artist = artist.replace(".", "");
+        String title = track.getTitle().replace(" ", "_");
+        title = title.replace("\\", "_");
+        title = title.replace("/", "_");
         // saveUrl(track.getImageName(track.getThumbURL()), track.getThumbURL());
         // saveUrl(track.getImageName(track.getThumb2URL()), track.getThumb2URL());
         // saveUrl(track.getImageName(track.getImageURL()), track.getImageURL());
         saveUrl(("FraNRK" + File.separator + artist + "_" + track.getImageName(track.getImageXLURL())), track.getImageXLURL());
-        saveUrl(("TilPopit" + File.separator + artist + "_" + track.getImageName(track.getURL())), track.getURL());
+        saveUrl(("TilPopit" + File.separator + artist + "-" + title + "_" + track.getImageName(track.getURL())), track.getURL());
     }
 
     public static void saveUrl(String filename, String urlString) throws MalformedURLException, IOException {
