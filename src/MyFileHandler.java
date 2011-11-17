@@ -9,7 +9,7 @@ import java.util.List;
 
 public class MyFileHandler {
 
-    public static void main(String[] args) throws MalformedURLException, IOException {
+    public static void main(String[] args) throws IOException {
         URL url = new URL("http://www.nrk.no/urort/api/getlist.ashx?listname=recommended&udid=popsenteret&apikey=GaRblmzRuKL30z&signature=4e51212b14ce2d9aedca04a5b4594161");
         // Read all the text returned by the server
         BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream(), "UTF8"));
@@ -29,13 +29,32 @@ public class MyFileHandler {
         in.close();
     }
 
+    public static String formatFileName(String s) {
+        String formatted = s.toLowerCase();
+        formatted = formatted.replace(" ", "_");
+        formatted = formatted.replace("&", "and");
+        formatted = formatted.replace(".", "");
+        formatted = formatted.replace("'", "");
+        formatted = formatted.replace("(", "_");
+        formatted = formatted.replace(")", "_");
+        formatted = formatted.replace("/", "_");
+        formatted = formatted.replace("\\", "_");
+        formatted = formatted.replace("æ", "_");
+        formatted = formatted.replace("ø", "_");
+        formatted = formatted.replace("å", "_");
+        formatted = formatted.replace("ð", "_");
+        formatted = formatted.replace("`", "");
+        formatted = formatted.replace("´", "");
+        formatted = formatted.replace("ö", "o");
+        formatted = formatted.replace("ü", "u");
+        formatted = formatted.replace("$", "");
+        formatted = formatted.replace("@", "");
+        return formatted;
+    }
+
     public static void saveTrack(Track track) throws MalformedURLException, IOException {
-        String artist = track.getArtistName().replace(" ", "_");
-        artist = artist.replace("&", "and");
-        artist = artist.replace(".", "");
-        String title = track.getTitle().replace(" ", "_");
-        title = title.replace("\\", "_");
-        title = title.replace("/", "_");
+        String artist = formatFileName(track.getArtistName());
+        String title = formatFileName(track.getTitle());
         // saveUrl(track.getImageName(track.getThumbURL()), track.getThumbURL());
         // saveUrl(track.getImageName(track.getThumb2URL()), track.getThumb2URL());
         // saveUrl(track.getImageName(track.getImageURL()), track.getImageURL());
